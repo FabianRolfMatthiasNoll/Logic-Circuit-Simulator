@@ -4,8 +4,7 @@ using Classes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class Gate : MonoBehaviour
-{
+public abstract class Gate : MonoBehaviour {
     public List<Gate> inputs;
     public List<GateConnection> InputConnections;
     public bool isSelected = false;
@@ -16,26 +15,22 @@ public abstract class Gate : MonoBehaviour
     private Vector3 _mouseOffset;
     public abstract bool GetOutput();
 
-    void Start()
-    {
+    void Start() {
         InputConnections = new List<GateConnection>();
         GameObject logicIndicator = transform.Find("LogicIndicator").gameObject;
         _logicIndicatorRenderer = logicIndicator.GetComponent<Renderer>();
     }
-    
-    private void Update()
-    {
+
+    private void Update() {
         SetOutline();
         logicLevel = GetOutput();
         UpdateLogicIndicator();
     }
 
-    private void SetOutline()
-    {
+    private void SetOutline() {
         Outline outline = transform.gameObject.GetComponent<Outline>();
 
-        if (outline == null)
-        {
+        if (outline == null) {
             outline = transform.gameObject.AddComponent<Outline>();
             outline.OutlineColor = Color.blue;
             outline.OutlineWidth = 14.0f;
@@ -43,47 +38,34 @@ public abstract class Gate : MonoBehaviour
 
         outline.enabled = isSelected;
     }
-    
-    public void UpdateLogicIndicator()
-    {
-        if (GetOutput())
-        {
+
+    public void UpdateLogicIndicator() {
+        if (GetOutput()) {
             _logicIndicatorRenderer.material = materialHigh;
-        }
-        else
-        {
+        } else {
             _logicIndicatorRenderer.material = materialLow;
         }
     }
-    
-    private void OnMouseDown()
-    {
+
+    private void OnMouseDown() {
         // Calculate the offset between the gate's position and the mouse position in world space
         _mouseOffset = gameObject.transform.position - GetMouseWorldPos();
     }
 
-    private void OnMouseDrag()
-    {
-        if(!GameStateManager.Instance.IsConnectionManagerActive)
-        {
+    private void OnMouseDrag() {
+        if (!GameStateManager.Instance.IsConnectionManagerActive) {
             Vector3 newPos = GetMouseWorldPos() + _mouseOffset;
             gameObject.transform.position = newPos;
         }
     }
 
 // Method to get mouse position in world coordinates
-    private Vector3 GetMouseWorldPos()
-    {
+    private Vector3 GetMouseWorldPos() {
         Vector3 mousePoint = Input.mousePosition;
-    
+
         // Assuming your gate is in the X-Z plane and your camera is orthographic
         mousePoint.z = Camera.main.transform.position.y;
 
         return Camera.main.ScreenToWorldPoint(mousePoint);
     }
-    
 }
-    
-        
-    
-
