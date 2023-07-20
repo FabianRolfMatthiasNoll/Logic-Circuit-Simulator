@@ -46,12 +46,12 @@ public class NewGate : MonoBehaviour {
     }
 
     public bool IsInputFree(int index) {
-        return inputConnections[index].ConnectedGate == null;
+        return inputConnections[index - 1].ConnectedGate == null;
     }
 
     public void UpdateInput(int index, NewGate gate, bool LogicLevel) {
-        inputConnections[index].ConnectedGate = gate;
-        inputConnections[index].logicLevel = LogicLevel;
+        inputConnections[index - 1].ConnectedGate = gate;
+        inputConnections[index - 1].logicLevel = LogicLevel;
     }
 
     public void RemoveInput(int index) {
@@ -76,6 +76,12 @@ public class NewGate : MonoBehaviour {
 
     public void SetOutline(bool state, int connectorIndex) {
         _connectorOutlines[connectorIndex].enabled = state;
+    }
+
+    public void ResetOutline() {
+        foreach (var connector in _connectorOutlines) {
+            connector.enabled = false;
+        }
     }
 
     private Transform GetConnector(int connectorIndex) {
